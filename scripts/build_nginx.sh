@@ -9,9 +9,9 @@
 # Once the dyno has is 'up' you can open your browser and navigate
 # this dyno's directory structure to download the nginx binary.
 
-NGINX_VERSION=${NGINX_VERSION-1.11.3}
-PCRE_VERSION=${PCRE_VERSION-8.39}
-ZLIB_VERSION=${ZLIB_VERSION-1.2.8}
+NGINX_VERSION=${NGINX_VERSION-1.13.11}
+PCRE_VERSION=${PCRE_VERSION-8.42}
+ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
 
 nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 pcre_tarball_url=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.gz
@@ -19,9 +19,7 @@ zlib_url=http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 
 temp_dir=$(mktemp -d /tmp/nginx.XXXXXXXXXX)
 
-echo "Serving files from /tmp on $PORT"
 cd /tmp
-python -m SimpleHTTPServer $PORT &
 
 cd $temp_dir
 echo "Temp dir: $temp_dir"
@@ -42,14 +40,12 @@ echo "Downloading $zlib_url"
     --with-zlib=zlib-${ZLIB_VERSION} \
     --prefix=/tmp/nginx \
     --with-http_gzip_static_module \
+    --with-http_ssl_module \
+    --with-threads \
+    --with-http_v2_module \
+    --with-file-aio \
+    --with-http_realip_module \
     --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
     --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,--as-needed'
-
   make install
 )
-
-while true
-do
-  sleep 1
-  echo "."
-done
