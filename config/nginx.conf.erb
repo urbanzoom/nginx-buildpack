@@ -9,9 +9,10 @@ events {
 }
 
 http {
-        gzip on;
-        gzip_comp_level 2;
-        gzip_min_length 512;
+	gzip on;
+	gzip_comp_level 2;
+	gzip_min_length 512;
+	gzip_types text/plain text/css text/json text/javascript application/javascript application/x-javascript application/json application/rss+xml application/vnd.ms-fontobject application/x-font-ttf application/xml font/opentype image/svg+xml text/xml;
 
 	server_tokens off;
 
@@ -27,20 +28,51 @@ http {
 	client_body_timeout <%= ENV['NGINX_CLIENT_BODY_TIMEOUT'] || 5 %>;
 
 	upstream app_server {
+		# Must match with config/puma.rb
 		server unix:/tmp/nginx.socket fail_timeout=0;
  	}
 
 	server {
 		listen <%= ENV["PORT"] %>;
 		server_name _;
+		port_in_redirect off;
 		keepalive_timeout 5;
 		client_max_body_size <%= ENV['NGINX_CLIENT_MAX_BODY_SIZE'] || 1 %>M;
 
+		location ~* ^/assets/ {
+			gzip_static on;
+
+			# Per RFC2616 - 1 year maximum expiry
+			expires 1y;
+			add_header Cache-Control public;
+
+			# Some browsers still send conditional-GET requests if there's a
+			# Last-Modified header or an ETag header even if they haven't
+			# reached the expiry date sent in the Expires header.
+			add_header Last-Modified "";
+			add_header ETag "";
+			break;
+
+			proxy_pass http://app_server;
+		}
+
 		location / {
+			proxy_set_header X-Real-IP $remote_addr;
 			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 			proxy_set_header Host $http_host;
 			proxy_redirect off;
 			proxy_pass http://app_server;
+
+			location ~* \.(eot|oft|svg|ttf|woff|woff2?)$ {
+				add_header Access-Control-Allow-Origin *;
+				proxy_pass http://app_server;
+			}
+		}
+
+		location /blog/ {
+			proxy_redirect off;
+			proxy_pass <%= ENV['BLOG_URL'] %>;
+			client_max_body_size 50M;
 		}
 	}
 }
