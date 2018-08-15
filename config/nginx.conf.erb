@@ -69,9 +69,9 @@ http {
 			}
 		}
 
-		location /blog/ {
+		location ~ /blog(/.+)$ {
 			proxy_redirect off;
-			proxy_pass <%= ENV['BLOG_URL'] %>;
+			proxy_pass <%= ENV['BLOG_URL'] %>$1;
 			client_max_body_size 50M;
 		}
 	}
