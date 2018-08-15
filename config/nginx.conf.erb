@@ -56,6 +56,12 @@ http {
 			proxy_pass http://app_server;
 		}
 
+		location ~ /blog(/.+)$ {
+			proxy_redirect off;
+			proxy_pass <%= ENV['BLOG_URL'] %>$1;
+			client_max_body_size 50M;
+		}
+
 		location / {
 			proxy_set_header X-Real-IP $remote_addr;
 			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -67,12 +73,6 @@ http {
 				add_header Access-Control-Allow-Origin *;
 				proxy_pass http://app_server;
 			}
-		}
-
-		location /blog/ {
-			proxy_redirect off;
-			proxy_pass <%= ENV['BLOG_URL'] %>;
-			client_max_body_size 50M;
-		}
+		}		
 	}
 }
