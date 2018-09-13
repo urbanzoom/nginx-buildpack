@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Build NGINX and modules on Heroku.
 # This program is designed to run in a web dyno provided by Heroku.
 # We would like to build an NGINX binary for the builpack on the
@@ -9,7 +10,7 @@
 # Once the dyno has is 'up' you can open your browser and navigate
 # this dyno's directory structure to download the nginx binary.
 
-NGINX_VERSION=${NGINX_VERSION-1.13.11}
+NGINX_VERSION=${NGINX_VERSION-1.15.3}
 PCRE_VERSION=${PCRE_VERSION-8.42}
 ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
 
@@ -49,3 +50,5 @@ echo "Downloading $zlib_url"
     --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,--as-needed'
   make install
 )
+
+cp /tmp/nginx/sbin/nginx $1
