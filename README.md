@@ -11,11 +11,15 @@ Some application servers (e.g. Ruby's Unicorn) halt progress when dealing with n
 * Buildpack Version: 0.8
 * NGINX Version: 1.15.3
 
-## Requirements
+## Requirements (Proxy Mode)
 
 * Your webserver listens to the socket at `/tmp/nginx.socket`.
 * You touch `/tmp/app-initialized` when you are ready for traffic.
 * You can start your web server with a shell command.
+
+## Requirements (Solo Mode)
+
+* Add a custom nginx config to your app source code at `config/nginx.conf.erb`. You can start by copying the [sample config for nginx solo mode](config/nginx-solo-sample.conf.erb).
 
 ## Features
 
