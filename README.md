@@ -8,8 +8,8 @@ Some application servers (e.g. Ruby's Unicorn) halt progress when dealing with n
 
 ## Versions
 
-* Buildpack Version: 0.9
-* NGINX Version: 1.15.5
+* Buildpack Version: 1.0
+* NGINX Version: 1.15.6
 
 ## Requirements (Proxy Mode)
 
