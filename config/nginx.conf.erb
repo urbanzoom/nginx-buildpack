@@ -115,5 +115,9 @@ http {
       client_max_body_size 50M;
       proxy_ssl_server_name on;
     }
+
+    location ~ ^/urbanlistings/(.*)$ {
+      proxy_pass http://ul.urbanzoom.com/$1;
+    }
   }
 }
