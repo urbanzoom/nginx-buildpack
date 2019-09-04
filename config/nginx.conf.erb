@@ -61,7 +61,7 @@ http {
     location ~* ^/assets/ {
       gzip_static on;
 
-      # Per RFC2616 - 1 year maximum expiry
+      # Per RFC2616 - 1 yeauserr maximum expiry
       expires 1y;
       add_header Cache-Control public;
 
@@ -116,8 +116,8 @@ http {
       proxy_ssl_server_name on;
     }
 
-    location ~ ^/urbanlistings/(.*)$ {
-      proxy_pass https://www.urbanlistings.com/$1;
-    }
+    # location ~ ^/urbanlistings/(.*)$ {
+    #  proxy_pass https://www.urbanlistings.com/$1;
+    # }
   }
 }
