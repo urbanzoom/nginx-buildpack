@@ -189,6 +189,7 @@ http {
   server {
     listen <%= ENV["PORT"] %>;
     server_name urbanmatch.sg;
+    port_in_redirect off;
 
     location ~* ^/assets/ {
       gzip_static on;
