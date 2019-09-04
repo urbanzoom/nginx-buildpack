@@ -109,7 +109,7 @@ http {
     listen <%= ENV["PORT"] %>;
     server_name www.urbanlistings.com;
     port_in_redirect off;
-    rewrite ^/urbanlistings(.*)$ $scheme://$host/$1 permanent;
+    rewrite ^/urbanlistings(.*)$ https://$host/$1 permanent;
 
     location ~* ^/assets/ {
       gzip_static on;
