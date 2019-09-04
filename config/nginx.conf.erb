@@ -136,7 +136,7 @@ http {
         rewrite ^ https://$host$request_uri? permanent;
       }
 
-      rewrite ^/urbanlistings(.*)$ $1 break;
+      rewrite ^/urbanlistings(.*)$ $1 permanent;
       proxy_pass http://app_server/urbanlistings/;
 
       location ~* \.(eot|oft|svg|ttf|woff|woff2?)$ {
