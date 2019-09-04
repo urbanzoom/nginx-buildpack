@@ -108,6 +108,7 @@ http {
   server {
     listen <%= ENV["PORT"] %>;
     server_name www.urbanlistings.com;
+    port_in_redirect off;
     rewrite ^/urbanlistings(.*)$ $1 permanent;
 
     location ~* ^/assets/ {
