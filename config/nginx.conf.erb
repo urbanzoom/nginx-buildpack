@@ -108,6 +108,7 @@ http {
   server {
     listen <%= ENV["PORT"] %>;
     server_name www.urbanlistings.com;
+    rewrite ^/urbanlistings(.*)$ $1 permanent;
 
     location ~* ^/assets/ {
       gzip_static on;
@@ -136,7 +137,6 @@ http {
         rewrite ^ https://$host$request_uri? permanent;
       }
 
-      rewrite ^/urbanlistings(.*)$ $1 permanent;
       proxy_pass http://app_server/urbanlistings/;
 
       location ~* \.(eot|oft|svg|ttf|woff|woff2?)$ {
