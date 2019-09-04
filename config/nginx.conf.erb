@@ -32,25 +32,6 @@ http {
     server unix:/tmp/nginx.socket fail_timeout=0;
   }
 
-  # server {
-  #   listen <%= ENV["PORT"] %>;
-  #   server_name ul.urbanzoom.com;
-  #   root /;
-
-  #   location / {
-  #     proxy_set_header X-Real-IP $remote_addr;
-  #     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-  #     proxy_set_header Host $http_host;
-  #     proxy_redirect off;
-
-  #     if ($http_x_forwarded_proto != 'https') {
-  #       rewrite ^ https://$host$request_uri? permanent;
-  #     }
-
-  #     proxy_pass http://app_server/urbanlistings;
-  #   }
-  # }
-
   server {
     listen <%= ENV["PORT"] %>;
     server_name _;
@@ -116,9 +97,12 @@ http {
       proxy_ssl_server_name on;
     }
 
-    location ~ ^/urbanlistings/(.*)$ {
-      return 301 http://www.urbanlistings.com$request_uri;
-    }
+   #  location /urbanlistings/(.*)$  {
+   #    proxy_pass urbanlistings.com$request_uri;
+   #    proxy_redirect off;
+   #    proxy_set_header X-Real-IP $remote_addr;
+   #    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+   # }
   }
 
   server {
