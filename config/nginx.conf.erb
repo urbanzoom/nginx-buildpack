@@ -109,7 +109,6 @@ http {
     listen <%= ENV["PORT"] %>;
     server_name www.urbanlistings.com;
     port_in_redirect off;
-    rewrite ^/urbanlistings(.*)$ https://$host$1 permanent;
 
     location ~* ^/assets/ {
       gzip_static on;
@@ -136,6 +135,10 @@ http {
 
       if ($http_x_forwarded_proto != 'https') {
         rewrite ^ https://$host$request_uri? permanent;
+      }
+
+      if ($request_method != GET) {
+        rewrite ^/urbanlistings(.*)$ $1 permanent;
       }
 
       proxy_pass http://app_server/urbanlistings/;
