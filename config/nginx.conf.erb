@@ -137,7 +137,7 @@ http {
         rewrite ^ https://$host$request_uri? permanent;
       }
 
-      if ($request_method != GET) {
+      if ($request_method = GET) {
         rewrite ^/urbanlistings(.*)$ $1 permanent;
       }
 
